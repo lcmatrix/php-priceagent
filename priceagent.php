@@ -24,8 +24,17 @@ class PriceAgent {
 
     private function loadInput() {
         $fd = fopen(INPUT_FILE, 'r');
-        //fgets($fd);
-        fclose($fd);
+        if ($fd) {
+            while (($buffer = fgets($fd)) !== false) {
+                $arr = preg_split('/'.DELIMITER.'/', $buffer);
+                //var_dump($arr);
+                // todo map
+            }
+            if (!feof($fd)) {
+                echo "Error: unexcepted fgets() fail";
+            }
+            fclose($fd);
+       }
     }
     
     private function createItem($url) {

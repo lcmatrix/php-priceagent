@@ -11,6 +11,11 @@
  */
 define("INPUT_FILE", "agent_input.txt");
 
+/**
+ * Constant for delimiter between link and threashold.
+ */
+define("DELIMITER", "###");
+
 /*
  * Constant for proxy server url.
  */
