@@ -21,4 +21,29 @@ define("DELIMITER", "###");
  */
 define("PROXY_URL","");
 
+// Mail settings
+/**
+ * Constant for the mail server host.
+ */
+define("MAIL_HOST", "");
+
+/**
+ * Constant for the recipient of the e-mail (name <e-mail address>).
+ */
+define("MAIL_TO", "");
+
+/**
+ * Constant for the sender of the e-mail (name <e-mail address).
+ */
+define("MAIL_FROM", "");
+
+/**
+ * Constant for the subject of the e-mail.
+ */
+define("MAIL_SUBJECT", "Target price has been reached");
+
+/**
+ * Constant for the body of the e-mail.
+ */
+define("MAIL_BODY", "Hello,\r\nthe target price for {0} has been reached. Current price is {1}.");
 ?>
