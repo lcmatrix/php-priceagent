@@ -17,28 +17,72 @@ error_reporting(E_ALL & ~E_WARNING);
  * @author Norman Seidel
  */
 class PriceAgent {
+    /**
+     * Array with all items.
+     */
+    private $itemList = array();
+    
+    /**
+     * Map with target price per item. The map key is the item ID.
+     */
+    private $targetPricePerItem = array();
 
+    /**
+     * Constructor.
+     */
     public function __construct() {
         $this->loadInput();
     }
 
+    /**
+     * Reads input file with links and target prices. Input file is configured in constant INPUT_FILE.
+     */
     private function loadInput() {
         $fd = fopen(INPUT_FILE, 'r');
         if ($fd) {
             while (($buffer = fgets($fd)) !== false) {
                 $arr = preg_split('/'.DELIMITER.'/', $buffer);
-                //var_dump($arr);
-                // todo map
+                try {
+                    $item = Item::createItem($arr[0]);
+                    array_push($this->itemList, $item);
+                    $pair = array($item->getId() => $arr[1]);
+                    $this->targetPricePerItem = array_merge($this->targetPricePerItem, $pair);
+                } catch (Exception $e) {
+                    echo "Could not determine type for: " . $arr[0] . "\n";
+                }
             }
             if (!feof($fd)) {
                 echo "Error: unexcepted fgets() fail";
             }
             fclose($fd);
        }
+       // var_dump($this);
     }
     
-    private function createItem($url) {
-        return Item::createItem($url);
+    /**
+     * Gives a list/array with all items from the input file / store.
+     *
+     * @return list/array with all items
+     */
+    public function getItemList() {
+        return $this->itemList;
+    }
+    
+    /**
+     * Checks all items whether the target price has been reached and sends an e-mail for those items.
+     */
+    public function check() {
+    
+    }
+    
+    /**
+     * Send e-mail with information that a target price has been reached.
+     */
+    private function sendMail($item) {
+        $body = str_ireplace("{0}", $item->getUrl(),  MAIL_BODY);
+        $body = str_ireplace("{1}", $item->getPrice(),  $body);
+        $headers = 'From: ' . MAIL_FROM;
+        // mail(MAIL_TO, MAIL_SUBJECT, $body, $headers);
     }
 }
 
@@ -48,6 +92,7 @@ class PriceAgent {
  * @author Norman Seidel
  */
 abstract class Item {
+    private $id = "";
     private $url = "";
     
     /**
@@ -56,7 +101,17 @@ abstract class Item {
      * @param $url URL for this item
      */
     public function __construct($url) {
+        $this->id = sha1($url);
         $this->url = $url;
+    }
+    
+    /**
+     * Getter for the item ID.
+     *
+     * @return ID
+     */
+    public function getId() {
+        return $this->id;
     }
     
     /**
@@ -73,13 +128,20 @@ abstract class Item {
      * 
      * @return price
      */
-    public abstract function getPriceForItem();
+    public abstract function getPrice();
     
+    /**
+     * Creates a concrete item object or throws an exception if the concrete type could not be determined.
+     *
+     * @return new item
+     * @throws Exception if the type could not be determined
+     */
     public static function createItem($url) {
         if (preg_match('/amazon/i', $url)) {
             $item = new AmazonItem($url);
+            return $item;
         }
-        return $item;
+        throw new Exception("Couldn't determine item type!");
     }
     
     /**
@@ -113,7 +175,7 @@ class AmazonItem extends Item {
      * 
      * @return price
      */
-    public function getPriceForItem() {
+    public function getPrice() {
         $htmlBody = $this->getHTML();
         $doc = new DOMDocument();
         $doc->loadHTML($htmlBody);
