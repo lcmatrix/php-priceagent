@@ -56,7 +56,6 @@ class PriceAgent {
             }
             fclose($fd);
        }
-       // var_dump($this);
     }
     
     /**
@@ -72,7 +71,16 @@ class PriceAgent {
      * Checks all items whether the target price has been reached and sends an e-mail for those items.
      */
     public function check() {
-    
+        foreach ($this->itemList as $item) {
+            $price = $item->getPrice();
+            $targetPrice = $this->targetPricePerItem[$item->getId()];
+            if ($price <= $targetPrice) {
+                $ret = $this->sendMail($item);
+                if ($ret == false) {
+                    echo "ERROR while sending e-mail for item: " . $item->getUrl();
+                }
+            }
+        }
     }
     
     /**
@@ -82,7 +90,7 @@ class PriceAgent {
         $body = str_ireplace("{0}", $item->getUrl(),  MAIL_BODY);
         $body = str_ireplace("{1}", $item->getPrice(),  $body);
         $headers = 'From: ' . MAIL_FROM;
-        // mail(MAIL_TO, MAIL_SUBJECT, $body, $headers);
+        mail(MAIL_TO, MAIL_SUBJECT, $body, $headers);
     }
 }
 
@@ -193,6 +201,7 @@ class AmazonItem extends Item {
 
 // TODO: remove this example
 $agent = new PriceAgent();
+$agent->check();
 /*
 $item = $agent->createItem("http://www.amazon.de/Original-Samsung-Headset-schwarz-passend/dp/B007N7EVFI/ref=sr_1_1?ie=UTF8&qid=1371485569&sr=8-1&keywords=samsung+s2+headset");
 var_dump($item);
