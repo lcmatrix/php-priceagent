@@ -3,7 +3,7 @@
  * A small price agent.
  *
  * @author Norman Seidel
- * @version 0.1 alpha
+ * @version 0.2
  */
 
 require('config.php');
@@ -195,24 +195,7 @@ class AmazonItem extends Item {
     }
 }
 
-
-
-
-
-// TODO: remove this example
+// call price agent
 $agent = new PriceAgent();
 $agent->check();
-/*
-$item = $agent->createItem("http://www.amazon.de/Original-Samsung-Headset-schwarz-passend/dp/B007N7EVFI/ref=sr_1_1?ie=UTF8&qid=1371485569&sr=8-1&keywords=samsung+s2+headset");
-var_dump($item);
-//$html = getHTML("http://www.amazon.de/Original-Samsung-Headset-schwarz-passend/dp/B007N7EVFI/ref=sr_1_1?ie=UTF8&qid=1371485569&sr=8-1&keywords=samsung+s2+headset");
-//$amazon = new AmazonItem("http://www.amazon.de/Original-Samsung-Headset-schwarz-passend/dp/B007N7EVFI/ref=sr_1_1?ie=UTF8&qid=1371485569&sr=8-1&keywords=samsung+s2+headset");
-
-$price = $item->getPriceForItem();
-$threshold = "5,0";
-$threshold = str_ireplace(",", ".", $threshold);
-if ($price < $threshold) {
-	echo "ok";
-}
-*/
 ?>
