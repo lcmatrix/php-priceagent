@@ -76,7 +76,7 @@ class PriceAgent {
             $targetPrice = $this->targetPricePerItem[$item->getId()];
             if ($price <= $targetPrice) {
                 $ret = $this->sendMail($item);
-                if ($ret == false) {
+                if ($ret != true) {
                     echo "ERROR while sending e-mail for item: " . $item->getUrl();
                 }
             }
@@ -90,7 +90,7 @@ class PriceAgent {
         $body = str_ireplace("{0}", $item->getUrl(),  MAIL_BODY);
         $body = str_ireplace("{1}", $item->getPrice(),  $body);
         $headers = 'From: ' . MAIL_FROM;
-        mail(MAIL_TO, MAIL_SUBJECT, $body, $headers);
+        return mail(MAIL_TO, MAIL_SUBJECT, $body, $headers);
     }
 }
 

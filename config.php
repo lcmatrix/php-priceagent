@@ -45,5 +45,5 @@ define("MAIL_SUBJECT", "Target price has been reached");
 /**
  * Constant for the body of the e-mail.
  */
-define("MAIL_BODY", "Hello,\r\nthe target price for {0} has been reached. Current price is {1}.");
+define("MAIL_BODY", "Hello,\r\nthe target price for {0} has been reached.\r\nCurrent price is {1}.");
 ?>
