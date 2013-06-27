@@ -4,6 +4,8 @@
 #
 ##################################################
 
+# set the path to the priceagent.php
 export PATH_TO_PRICEAGENT=
 
-php -f $PATH_TO_PRICEAGENT/priceagent.php
+cd $PATH_TO_PRICEAGENT
+php -f priceagent.php
