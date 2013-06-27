@@ -2,6 +2,8 @@
 #
 # Shell script to run price agent from a console
 #
+# version 0.2
+#
 ##################################################
 
 # set the path to the priceagent.php
