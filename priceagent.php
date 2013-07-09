@@ -7,6 +7,7 @@
  */
 
 require('config.php');
+require('storage.php');
  
 // Ignore warnings (occur in DOMDocument)
 error_reporting(E_ALL & ~E_WARNING);
@@ -106,10 +107,11 @@ abstract class Item {
     /**
      * Constructor.
      *
+     * @param $id ID for this item
      * @param $url URL for this item
      */
-    public function __construct($url) {
-        $this->id = sha1($url);
+    public function __construct($id, $url) {
+        $this->id = $id;
         $this->url = $url;
     }
     
@@ -141,12 +143,13 @@ abstract class Item {
     /**
      * Creates a concrete item object or throws an exception if the concrete type could not be determined.
      *
+     * @param $url URL of the item
      * @return new item
      * @throws Exception if the type could not be determined
      */
     public static function createItem($url) {
         if (preg_match('/amazon/i', $url)) {
-            $item = new AmazonItem($url);
+            $item = new AmazonItem(sha1($url), $url);
             return $item;
         }
         throw new Exception("Couldn't determine item type!");
